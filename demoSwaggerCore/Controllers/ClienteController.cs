@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using demoSwaggerCore.Models;
+using demoSwaggerCore.Modelos;
 using Swashbuckle.AspNetCore;
 
 namespace demoSwaggerCore
@@ -14,6 +14,14 @@ namespace demoSwaggerCore
 
     public class ClienteController : Controller
     {
+        private readonly BEPENSAContext BEcontext;
+
+        public ClienteController(BEPENSAContext context)
+        {
+            BEcontext = context;
+        }
+
+    
         // GET: /Cliente
         /// <summary>
         /// Obtiene registros sobre los clientes
@@ -43,9 +51,9 @@ namespace demoSwaggerCore
         /// <response code="201">Regresa un elemento recien creado</response>
         /// <response code="400">Si existe un error en el contenido de la peticion</response> 
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<Cliente> Get()
         {
-            return new string[] { "value1", "value2" };
+            return BEcontext.Cliente;
         }
 
         // GET: api/Cliente/5
@@ -54,9 +62,9 @@ namespace demoSwaggerCore
         /// </summary>
         [HttpGet("{id}", Name = "Get")]
        
-        public string Get(int id)
+        public Cliente Get(int id)
         {
-            return "value";
+            return BEcontext.Cliente.Find();
         }
 
         // POST: api/Cliente

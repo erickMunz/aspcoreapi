@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Swagger;
+using demoSwaggerCore.Modelos;
 using System.Reflection;
 using System.IO;
 namespace demoSwaggerCore
@@ -25,7 +27,12 @@ namespace demoSwaggerCore
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddEntityFrameworkSqlServer()
+                .AddDbContext<BEPENSAContext>((serviceProvider, options) =>
+                     options.UseSqlServer(Configuration.GetConnectionString("BepensaContext"))
+                                         .UseInternalServiceProvider(serviceProvider));
             services.AddMvc();
+            
             services.AddSwaggerGen(c =>
                     {
                         c.SwaggerDoc("v1", new Info {
